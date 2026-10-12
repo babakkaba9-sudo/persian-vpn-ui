@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPN من - نسخه واقعی</title>
+    <title>VPN من - نسخه پیشرفته</title>
     <style>
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            user-select: none; /* جلوگیری از انتخاب متن */
+            user-select: none;
         }
 
         body {
@@ -22,6 +22,7 @@
             min-height: 100vh;
             padding: 20px;
             transition: background 0.5s ease;
+            overflow: hidden; /* برای جلوگیری از اسکرول اضافه */
         }
 
         .app-container {
@@ -63,7 +64,7 @@
 
         /* دکمه اتصال */
         .connect-btn {
-            background: linear-gradient(135deg, #4a4a6a, #3a3a5a); /* حالت قطع */
+            background: linear-gradient(135deg, #4a4a6a, #3a3a5a);
             width: 180px;
             height: 180px;
             border-radius: 50%;
@@ -81,18 +82,12 @@
             box-shadow: 0 0 0 rgba(107, 91, 255, 0);
         }
 
-        .connect-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* حالت در حال اتصال */
+        .connect-btn:active { transform: scale(0.95); }
         .connect-btn.connecting {
             background: linear-gradient(135deg, #ffaa00, #ffcc00);
             box-shadow: 0 0 50px rgba(255, 170, 0, 0.5);
             animation: pulse 1.5s infinite;
         }
-
-        /* حالت متصل */
         .connect-btn.connected {
             background: linear-gradient(135deg, #00c853, #00e676);
             box-shadow: 0 0 50px rgba(0, 200, 83, 0.5);
@@ -104,15 +99,8 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
         }
 
-        .connect-btn span.icon {
-            font-size: 2.8rem;
-            margin-bottom: 5px;
-            transition: transform 0.3s;
-        }
-
-        .connect-btn.connected span.icon {
-            transform: rotate(90deg); /* چرخش دوشاخه در حالت اتصال */
-        }
+        .connect-btn span.icon { font-size: 2.8rem; margin-bottom: 5px; transition: transform 0.3s; }
+        .connect-btn.connected span.icon { transform: rotate(90deg); }
 
         .status-text {
             color: #a0a0b0;
@@ -121,15 +109,8 @@
             height: 20px;
             transition: color 0.3s;
         }
-
-        .status-text.active {
-            color: #00e676;
-            font-weight: bold;
-        }
-
-        .status-text.connecting-text {
-            color: #ffaa00;
-        }
+        .status-text.active { color: #00e676; font-weight: bold; }
+        .status-text.connecting-text { color: #ffaa00; }
 
         /* کارت سرور */
         .server-card {
@@ -144,38 +125,14 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-
-        .server-card:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-        }
-
-        .server-info {
-            text-align: right;
-        }
-
-        .server-info p:first-child {
-            font-size: 0.75rem;
-            color: #a0a0b0;
-            margin-bottom: 5px;
-        }
-
-        .server-info p:last-child {
-            font-size: 1.05rem;
-            font-weight: bold;
-        }
-
-        .arrow {
-            color: #a0a0b0;
-            font-size: 1.2rem;
-        }
+        .server-card:hover { background-color: rgba(255, 255, 255, 0.08); }
+        .server-info { text-align: right; }
+        .server-info p:first-child { font-size: 0.75rem; color: #a0a0b0; margin-bottom: 5px; }
+        .server-info p:last-child { font-size: 1.05rem; font-weight: bold; }
+        .arrow { color: #a0a0b0; font-size: 1.2rem; }
 
         /* آمار سرعت */
-        .stats-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
+        .stats-row { display: flex; gap: 15px; margin-bottom: 20px; }
         .stat-box {
             background-color: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -188,31 +145,11 @@
             gap: 5px;
             transition: border-color 0.3s;
         }
-
-        .stat-box.active {
-            border-color: rgba(0, 200, 83, 0.3);
-        }
-
-        .stat-box .label {
-            font-size: 0.75rem;
-            color: #a0a0b0;
-        }
-
-        .stat-box .value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffffff;
-            transition: color 0.3s;
-        }
-
-        .stat-box.active .value {
-            color: #00e676;
-        }
-
-        .stat-box .unit {
-            font-size: 0.7rem;
-            color: #a0a0b0;
-        }
+        .stat-box.active { border-color: rgba(0, 200, 83, 0.3); }
+        .stat-box .label { font-size: 0.75rem; color: #a0a0b0; }
+        .stat-box .value { font-size: 1.3rem; font-weight: bold; color: #ffffff; transition: color 0.3s; }
+        .stat-box.active .value { color: #00e676; }
+        .stat-box .unit { font-size: 0.7rem; color: #a0a0b0; }
 
         /* بخش IP و پینگ */
         .ip-info {
@@ -227,23 +164,11 @@
             opacity: 0;
             transition: opacity 0.5s;
         }
-
-        .ip-info.visible {
-            opacity: 1;
-        }
-
-        .ip-info span {
-            color: #fff;
-            font-weight: bold;
-            direction: ltr; /* برای نمایش صحیح IP */
-        }
+        .ip-info.visible { opacity: 1; }
+        .ip-info span { color: #fff; font-weight: bold; direction: ltr; }
 
         /* دکمه‌های پایین */
-        .bottom-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
+        .bottom-buttons { display: flex; gap: 15px; }
         .bottom-btn {
             background-color: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -259,10 +184,7 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-
-        .bottom-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+        .bottom-btn:hover { background-color: rgba(255, 255, 255, 0.1); }
 
         /* اسپینر */
         .spinner {
@@ -275,14 +197,94 @@
             animation: spin 1s ease-in-out infinite;
             margin-bottom: 5px;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .connect-btn.connecting .spinner { display: block; }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* ===== استایل منوی انتخاب سرور (Modal) ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* چسبیده به پایین */
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
 
-        .connect-btn.connecting .spinner {
-            display: block;
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
+
+        .modal-content {
+            background: #1c1c30;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 25px 25px 0 0;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h2 { font-size: 1.2rem; }
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* لیست سرورها */
+        .server-list { list-style: none; }
+        .server-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 5px;
+        }
+        .server-item:hover { background: rgba(255, 255, 255, 0.05); }
+        .server-item.selected { background: rgba(107, 91, 255, 0.15); border: 1px solid rgba(107, 91, 255, 0.3); }
+        
+        .server-item-info { display: flex; align-items: center; gap: 12px; }
+        .server-item-info .flag { font-size: 1.5rem; }
+        .server-item-info .name { font-size: 1rem; font-weight: 500; }
+        .server-item-info .city { font-size: 0.75rem; color: #a0a0b0; }
+        
+        .check-icon { color: #00e676; font-size: 1.2rem; display: none; }
+        .server-item.selected .check-icon { display: block; }
     </style>
 </head>
 <body>
@@ -293,7 +295,6 @@
             <h1>VPN من</h1>
         </div>
 
-        <!-- دکمه اتصال -->
         <button class="connect-btn" id="connectBtn" onclick="toggleConnect()">
             <div class="spinner"></div>
             <span class="icon" id="btnIcon">🔌</span>
@@ -302,14 +303,13 @@
 
         <p class="status-text" id="statusText">آماده برای اتصال</p>
 
-        <!-- IP و پینگ (مخفی در ابتدا) -->
         <div class="ip-info" id="ipInfo">
             <div>IP شما: <span id="ipValue">---.---.---.---</span></div>
             <div>پینگ: <span id="pingValue">-- ms</span></div>
         </div>
 
-        <!-- کارت سرور -->
-        <div class="server-card" onclick="changeServer()">
+        <!-- کارت سرور (با کلیک، منو باز می‌شود) -->
+        <div class="server-card" onclick="openServerModal()">
             <div class="server-info">
                 <p>سرور انتخاب شده</p>
                 <p id="serverName">آلمان - فرانکفورت 🇩🇪</p>
@@ -317,38 +317,43 @@
             <div class="arrow">‹</div>
         </div>
 
-        <!-- آمار -->
         <div class="stats-row">
             <div class="stat-box" id="uploadBox">
                 <span class="label">آپلود ⬆️</span>
-                <div>
-                    <span class="value" id="uploadSpeed">0</span>
-                    <span class="unit">KB/s</span>
-                </div>
+                <div><span class="value" id="uploadSpeed">0</span> <span class="unit">KB/s</span></div>
             </div>
             <div class="stat-box" id="downloadBox">
                 <span class="label">دانلود ⬇️</span>
-                <div>
-                    <span class="value" id="downloadSpeed">0</span>
-                    <span class="unit">KB/s</span>
-                </div>
+                <div><span class="value" id="downloadSpeed">0</span> <span class="unit">KB/s</span></div>
             </div>
         </div>
 
-        <!-- دکمه‌های پایین -->
         <div class="bottom-buttons">
             <button class="bottom-btn" onclick="alert('آمار مصرف شما:\nدانلود کل: 1.2 GB\nآپلود کل: 340 MB')">📊 آمار</button>
             <button class="bottom-btn" onclick="alert('تنظیمات: به زودی...')">⚙️ تنظیمات</button>
         </div>
     </div>
 
+    <!-- ===== منوی انتخاب سرور (Modal) ===== -->
+    <div class="modal-overlay" id="serverModal" onclick="closeServerModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>انتخاب سرور</h2>
+                <button class="close-btn" onclick="closeServerModal()">✕</button>
+            </div>
+            <ul class="server-list" id="serverList">
+                <!-- لیست سرورها با JS پر می‌شود -->
+            </ul>
+        </div>
+    </div>
+
     <script>
-        // --- متغیرهای سراسری ---
-        let state = 'disconnected'; // disconnected, connecting, connected
+        // --- متغیرها ---
+        let state = 'disconnected';
         let speedInterval = null;
         let pingInterval = null;
+        let currentServerIndex = 0;
 
-        // المان‌های DOM
         const btn = document.getElementById('connectBtn');
         const btnIcon = document.getElementById('btnIcon');
         const connectText = document.getElementById('connectText');
@@ -360,137 +365,158 @@
         const downloadSpeed = document.getElementById('downloadSpeed');
         const uploadBox = document.getElementById('uploadBox');
         const downloadBox = document.getElementById('downloadBox');
+        const serverModal = document.getElementById('serverModal');
+        const serverList = document.getElementById('serverList');
 
-        // لیست سرورها برای تغییر
+        // --- لیست سرورها (با کد کشور و نام شهر) ---
         const servers = [
-            "آلمان - فرانکفورت 🇩🇪",
-            "هلند - آمستردام 🇳🇱",
-            "ترکیه - استانبول 🇹🇷",
-            "آمریکا - نیویورک 🇺🇸",
-            "فرانسه - پاریس 🇫🇷"
+            { country: "آلمان", city: "فرانکفورت", flag: "🇩🇪", code: "DE" },
+            { country: "هلند", city: "آمستردام", flag: "🇳🇱", code: "NL" },
+            { country: "ترکیه", city: "استانبول", flag: "🇹🇷", code: "TR" },
+            { country: "آمریکا", city: "نیویورک", flag: "🇺🇸", code: "US" },
+            { country: "فرانسه", city: "پاریس", flag: "🇫🇷", code: "FR" },
+            { country: "انگلستان", city: "لندن", flag: "🇬🇧", code: "GB" },
+            { country: "امارات", city: "دبی", flag: "🇦🇪", code: "AE" }
         ];
-        let currentServerIndex = 0;
 
         // --- تابع اصلی تغییر وضعیت ---
         function toggleConnect() {
-            if (state === 'disconnected') {
-                startConnecting();
-            } else if (state === 'connected') {
-                disconnect();
-            }
-            // اگر در حال اتصال بود، هیچ کاری نکن (تا تاخیر تمام شود)
+            if (state === 'connecting') return; // جلوگیری از کلیک اضافی
+            if (state === 'disconnected') startConnecting();
+            else if (state === 'connected') disconnect();
         }
 
-        // --- شروع فرآیند اتصال (شبیه‌سازی Handshake) ---
         function startConnecting() {
             state = 'connecting';
-            
-            // تغییر ظاهر دکمه
             btn.classList.remove('connected');
             btn.classList.add('connecting');
-            btnIcon.style.display = 'none'; // مخفی کردن دوشاخه
+            btnIcon.style.display = 'none';
             connectText.innerText = 'در حال اتصال...';
             statusText.innerText = 'در حال برقراری ارتباط با سرور...';
             statusText.className = 'status-text connecting-text';
-            ipInfo.classList.remove('visible'); // مخفی کردن IP تا اتصال کامل
+            ipInfo.classList.remove('visible');
 
-            // تاخیر ۲.۵ ثانیه‌ای برای شبیه‌سازی واقعی بودن
             setTimeout(() => {
-                if (state === 'connecting') {
-                    completeConnection();
-                }
-            }, 2500);
+                if (state === 'connecting') completeConnection();
+            }, 2000); // ۲ ثانیه تاخیر
         }
 
-        // --- تکمیل اتصال ---
         function completeConnection() {
             state = 'connected';
-
-            // تغییر ظاهر دکمه به سبز
             btn.classList.remove('connecting');
             btn.classList.add('connected');
             btnIcon.style.display = 'block';
-            btnIcon.innerText = '🔓'; // قفل باز
+            btnIcon.innerText = '🔓';
             connectText.innerText = 'قطع';
-            
             statusText.innerText = 'متصل - امن';
             statusText.className = 'status-text active';
 
-            // نمایش IP و پینگ
             ipInfo.classList.add('visible');
             generateFakeIP();
             updatePing();
-
-            // فعال کردن استایل سبز برای باکس‌های سرعت
             uploadBox.classList.add('active');
             downloadBox.classList.add('active');
-
-            // شروع شبیه‌سازی نوسان سرعت
             startSpeedFluctuation();
-            
-            // شروع به‌روزرسانی پینگ هر ۵ ثانیه
             pingInterval = setInterval(updatePing, 5000);
         }
 
-        // --- قطع اتصال ---
         function disconnect() {
             state = 'disconnected';
             clearInterval(speedInterval);
             clearInterval(pingInterval);
-
-            // برگرداندن ظاهر به حالت اول
             btn.classList.remove('connected', 'connecting');
             btnIcon.innerText = '🔌';
             connectText.innerText = 'اتصال';
             statusText.innerText = 'آماده برای اتصال';
             statusText.className = 'status-text';
-            
             ipInfo.classList.remove('visible');
             uploadBox.classList.remove('active');
             downloadBox.classList.remove('active');
-            
             uploadSpeed.innerText = '0';
             downloadSpeed.innerText = '0';
         }
 
-        // --- شبیه‌سازی نوسان سرعت ---
         function startSpeedFluctuation() {
             speedInterval = setInterval(() => {
                 if (state !== 'connected') return;
-
-                // تولید عدد رندوم برای دانلود (بین 200 تا 2500)
-                const dl = Math.floor(Math.random() * 2300) + 200;
-                // تولید عدد رندوم برای آپلود (بین 50 تا 800)
-                const ul = Math.floor(Math.random() * 750) + 50;
-
-                downloadSpeed.innerText = dl;
-                uploadSpeed.innerText = ul;
-            }, 1000); // هر ۱ ثانیه آپدیت شود
+                downloadSpeed.innerText = Math.floor(Math.random() * 2300) + 200;
+                uploadSpeed.innerText = Math.floor(Math.random() * 750) + 50;
+            }, 1000);
         }
 
-        // --- تولید IP ساختگی ---
         function generateFakeIP() {
-            // IP آلمان معمولاً با 85 یا 185 شروع می‌شود
             const ip = `185.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
             ipValue.innerText = ip;
         }
 
-        // --- به‌روزرسانی پینگ ---
         function updatePing() {
-            const ping = Math.floor(Math.random() * 40) + 15; // بین 15 تا 55 میلی‌ثانیه
+            const ping = Math.floor(Math.random() * 40) + 15;
             pingValue.innerText = `${ping} ms`;
         }
 
-        // --- تغییر سرور ---
-        function changeServer() {
-            if (state === 'connected') {
-                alert('لطفاً ابتدا اتصال را قطع کنید تا سرور را تغییر دهید.');
+        // --- مدیریت منوی سرور (Modal) ---
+        function openServerModal() {
+            renderServerList();
+            serverModal.classList.add('active');
+        }
+
+        function closeServerModal(event) {
+            // اگر روی خود overlay کلیک شد (نه محتوای داخلش)، بسته شود
+            if (!event || event.target === serverModal) {
+                serverModal.classList.remove('active');
+            }
+        }
+
+        function renderServerList() {
+            serverList.innerHTML = ''; // پاک کردن لیست قبلی
+
+            servers.forEach((server, index) => {
+                const li = document.createElement('li');
+                li.className = `server-item ${index === currentServerIndex ? 'selected' : ''}`;
+                
+                li.innerHTML = `
+                    <div class="server-item-info">
+                        <span class="flag">${server.flag}</span>
+                        <div>
+                            <div class="name">${server.country}</div>
+                            <div class="city">${server.city}</div>
+                        </div>
+                    </div>
+                    <span class="check-icon">✓</span>
+                `;
+
+                li.onclick = () => selectServer(index);
+                serverList.appendChild(li);
+            });
+        }
+
+        function selectServer(index) {
+            if (index === currentServerIndex) {
+                closeServerModal();
                 return;
             }
-            currentServerIndex = (currentServerIndex + 1) % servers.length;
-            document.getElementById('serverName').innerText = servers[currentServerIndex];
+
+            const wasConnected = (state === 'connected');
+            
+            // اگر متصل بود، اول قطع کن
+            if (state !== 'disconnected') {
+                disconnect();
+            }
+
+            // سرور جدید را تنظیم کن
+            currentServerIndex = index;
+            const server = servers[index];
+            document.getElementById('serverName').innerText = `${server.country} - ${server.city} ${server.flag}`;
+
+            closeServerModal();
+
+            // اگر قبلاً متصل بود، دوباره وصل شو
+            if (wasConnected) {
+                setTimeout(() => {
+                    startConnecting();
+                }, 300); // کمی تاخیر برای اینکه قطع شدن حس شود
+            }
         }
     </script>
-
 </body>
-                                 </html>
+</html>
